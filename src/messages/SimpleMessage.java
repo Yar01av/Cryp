@@ -7,8 +7,8 @@ public class SimpleMessage<C> extends Message<C> {
     private final int id;
     private final C content;
 
-    public SimpleMessage() {
-        this.content = getContent();
+    public SimpleMessage(C content) {
+        this.content = content;
         this.id = counter.incrementAndGet();
     }
 

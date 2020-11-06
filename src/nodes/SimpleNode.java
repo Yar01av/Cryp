@@ -7,21 +7,25 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SimpleNode extends Node<String> {
+public class SimpleNode extends Node<String, SimpleNode> {
     private final Set<SimpleNode> neighbours = new HashSet<>();
     private Ledger ledger;
     private static final AtomicInteger counter = new AtomicInteger();
     private final int id;
+    private Set<Integer> seenMessageIds = new HashSet<>();
 
-    public SimpleNode(Set<SimpleNode> nodes, Ledger ledger, String id) {
-        neighbours.addAll(nodes);
+    public SimpleNode(Ledger ledger) {
         this.ledger = ledger;
         this.id = counter.incrementAndGet();
     }
 
     @Override
-    void flood(Message<String> message) {
+    public void flood(Message<String> message) {
         System.out.println(message);
+
+        if (seenMessageIds.contains(message.getId())) {
+            return;
+        };
 
         for (SimpleNode node : neighbours) {
             node.flood(message);
@@ -29,12 +33,18 @@ public class SimpleNode extends Node<String> {
     }
 
     @Override
-    int getId() {
+    public int getId() {
         return this.id;
     }
 
     @Override
-    void addToLedger(int quantity, String recipient) {
+    public void addNeighbour(SimpleNode node) {
+        node.addNeighbour(this);
+        neighbours.add(node);
+    }
+
+    @Override
+    public void addToLedger(int quantity, String recipient) {
         this.ledger.addEntry(this.getId(), recipient, quantity);
     }
 }
