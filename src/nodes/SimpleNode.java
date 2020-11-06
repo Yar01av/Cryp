@@ -21,11 +21,12 @@ public class SimpleNode extends Node<String, SimpleNode> {
 
     @Override
     public void flood(Message<String> message) {
-        System.out.println(message);
-
         if (seenMessageIds.contains(message.getId())) {
             return;
-        };
+        } else {
+            System.out.println(message.getContent());
+            seenMessageIds.add(message.getId());
+        }
 
         for (SimpleNode node : neighbours) {
             node.flood(message);
@@ -39,12 +40,25 @@ public class SimpleNode extends Node<String, SimpleNode> {
 
     @Override
     public void addNeighbour(SimpleNode node) {
-        node.addNeighbour(this);
+        if (neighbours.contains(node)) {
+            return;
+        }
+
         neighbours.add(node);
+        node.addNeighbour(this);
     }
 
     @Override
     public void addToLedger(int quantity, String recipient) {
         this.ledger.addEntry(this.getId(), recipient, quantity);
+    }
+
+    @Override
+    public boolean equals(Object a) {
+        if (a instanceof SimpleNode) {
+            return ((SimpleNode) a).id == this.id;
+        } else {
+            return super.equals(a);
+        }
     }
 }
