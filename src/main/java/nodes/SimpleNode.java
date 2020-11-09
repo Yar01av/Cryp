@@ -1,6 +1,7 @@
 package nodes;
 
-import ledgers.Ledger;
+import ledgers.*;
+import ledgers.SimpleTransaction;
 import messages.Message;
 
 import java.util.HashSet;
@@ -16,7 +17,7 @@ public class SimpleNode extends Node<String, SimpleNode> {
 
     public SimpleNode(Ledger ledger) {
         this.ledger = ledger;
-        this.id = counter.incrementAndGet();
+        this.id = counter.getAndIncrement();
     }
 
     @Override
@@ -49,8 +50,8 @@ public class SimpleNode extends Node<String, SimpleNode> {
     }
 
     @Override
-    public void addToLedger(int quantity, String recipient) {
-        this.ledger.addEntry(this.getId(), recipient, quantity);
+    public void addToLedger(int quantity, int recipient) {
+        this.ledger.addEntry(new SimpleTransaction(this.getId(), recipient, quantity));
     }
 
     @Override

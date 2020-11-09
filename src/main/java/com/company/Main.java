@@ -1,7 +1,6 @@
 package com.company;
 
-import ledgers.Ledger;
-import ledgers.SimpleLedger;
+import ledgers.*;
 import messages.Message;
 import messages.SimpleMessage;
 import nodes.Node;
@@ -22,5 +21,11 @@ public class Main {
         n0.addNeighbour(new HashSet<>(Arrays.asList(n1, n2)));
 
         n0.flood(new SimpleMessage<>("Hello World!"));
+
+        ledger.addEntry(new SimpleTransaction(-1, 0, 10));
+        ledger.addEntry(new SimpleTransaction(-1, 1, 5));
+        n0.addToLedger(10, 1);
+        ledger.printLedger();
+        System.out.println(ledger.getCurrentScore());
     }
 }

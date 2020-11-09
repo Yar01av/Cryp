@@ -18,6 +18,6 @@ abstract public class Node<MessageType, NeighbourType extends Node<MessageType, 
         }
     }
 
-    public abstract void addToLedger(int quantity, String recipient);
+    public abstract void addToLedger(int quantity, int recipient);
 }
 
